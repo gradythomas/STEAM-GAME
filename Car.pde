@@ -2,12 +2,15 @@ public class Car {
   PVector vel, pos;
   float rotation;
   float mag;
+  PImage car;
 
   Car(int xpos, int ypos) {
     pos = new PVector(xpos, ypos);
     vel = new PVector(0.0, 0.0);
     rotation = 0;
     mag = 0;
+    car = loadImage("car.png");
+    car.resize(50,20);
   }
 
   void move() {
@@ -31,7 +34,7 @@ public class Car {
       if (Math.abs(mag) < 0.7) mag = 0;
     }
     
-    if (mag > 5) mag = 5;
+    if (mag > 8) mag = 8;
   }
 
   void update() {
@@ -40,7 +43,7 @@ public class Car {
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(rotation);
-    rect(0, 0, 50, 10);
+    image(car, -25,-10);
     popMatrix();
   }
 }
