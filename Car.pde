@@ -1,8 +1,8 @@
 public class Car {
-  PVector vel, pos;
-  float rotation;
-  float mag;
-  PImage car;
+  protected PVector vel, pos;
+  protected float rotation;
+  protected float mag;
+  protected PImage car;
 
   Car(int xpos, int ypos) {
     pos = new PVector(xpos, ypos);
@@ -15,8 +15,6 @@ public class Car {
 
   void move() {
     accelerate();
-    if (keyPressed && key == 'd') rotation += .1;
-    if (keyPressed && key == 'a') rotation -= .1;
   
     vel.x = cos(rotation)*mag;
     vel.y = sin(rotation)*mag;
@@ -26,6 +24,8 @@ public class Car {
   }
 
   void accelerate() {
+    if (keyPressed && key == 'd') rotation += .1;
+    if (keyPressed && key == 'a') rotation -= .1;
     if (mousePressed) {
       mag+=0.1;
     } else {
