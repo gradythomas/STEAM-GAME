@@ -36,6 +36,14 @@ public class Car {
     
     if (mag > 8) mag = 8;
   }
+  
+  //checks by drawing two circles inside each car
+  void checkCollision(AICar other) {
+    if (dist(pos.x-10, pos.y, other.pos.x-10, other.pos.y) < 30 || dist(pos.x-10, pos.y, other.pos.x+10, other.pos.y) < 30 || dist(pos.x+10, pos.y, other.pos.x-10, other.pos.y) < 30 || dist(pos.x+10, pos.y, other.pos.x+10, other.pos.y) < 30) {
+      other.collided = true;
+    } else {
+    }
+  }
 
   void update() {
     move();
@@ -44,6 +52,8 @@ public class Car {
     translate(pos.x, pos.y);
     rotate(rotation);
     image(car, -25,-10);
+    //ellipse(-10, 0, 20, 20);
+    //ellipse(10, 0, 20, 20);
     popMatrix();
   }
 }
