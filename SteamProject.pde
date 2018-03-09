@@ -1,5 +1,4 @@
 
-
 int x = 0;
 Car racecar;
 AICar enemy;
@@ -15,5 +14,6 @@ void draw() {
   background(0);
   racecar.update();
   enemy.update(racecar);
+  racecar.checkCollision(enemy);
   
 }
