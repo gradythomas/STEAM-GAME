@@ -8,15 +8,15 @@ class AICar extends Car {
   }
 
   void accelerate(Car other) {
-    float dist = dist(pos.x, pos.y, other.pos.x, other.pos.y);
-    mag = dist * 0.05;
-    float distx = other.pos.x - pos.x;
-    float disty = other.pos.y - pos.y;
+    float dist = dist(pos.x, pos.y, (other.pos.x+50*cos(other.rotation)), (other.pos.y+50*sin(other.rotation)));
+    mag+=0.1;
+    float distx = (other.pos.x+50*cos(other.rotation)) - pos.x;
+    float disty = (other.pos.y+50*sin(other.rotation)) - pos.y;
     if (distx > 0 && disty > 0) rotation = acos(distx/dist);
     if (distx < 0 && disty > 0) rotation = PI-acos((distx*-1)/(dist));
     if (distx < 0 && disty < 0) rotation = PI+acos((distx*-1)/(dist));
     if (distx > 0 && disty < 0) rotation = PI+acos((distx*-1)/(dist));
-    if (mag > 12) mag = 12;
+    if (mag > 7) mag = 7;
   }
 
   void move(Car other) {
