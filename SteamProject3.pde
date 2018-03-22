@@ -10,7 +10,7 @@ int screensizex, screensizey, stage;
 
 Box2DProcessing box2d;
 Car b;
-Point p = new Point();
+Point p1 = new Point();
 
 ArrayList<AICar> enemies = new ArrayList<AICar>();
 ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
@@ -20,10 +20,8 @@ void setup() {
   size(600, 600);
 
   stage = 1;
-  screensizex=round(width*.90);
-  screensizey=round(height*.90);
   startscreen = loadImage("Racecar.png");
-  image(startscreen, 0, 0, screensizex, screensizey);
+  image(startscreen, 0, 0, width, height);
   title = createFont("font", 1000, true);
 
 
@@ -50,10 +48,7 @@ void setup() {
   obstacles.add(new Obstacle(550, 350));
   obstacles.add(new Obstacle(550, 450));
   obstacles.add(new Obstacle(550, 550));
-  obstacles.add(new Obstacle(250, 250));
-  obstacles.add(new Obstacle(250, 350));
-  obstacles.add(new Obstacle(350, 250));
-  obstacles.add(new Obstacle(350, 350));
+  obstacles.add(new CircleObst(300, 300, 100));
   obstacles.add(new Obstacle(150, 550));
   obstacles.add(new Obstacle(250, 550));
   obstacles.add(new Obstacle(350, 550));
@@ -86,10 +81,6 @@ void draw() {
 
     b.display();
 
-    for (AICar d3 : enemies) {
-      d3.display(p);
-    }
-
     for (Obstacle obs : obstacles) {
       obs.display();
     }
@@ -104,6 +95,7 @@ void draw() {
           for (AICar d3 : enemies) {
             d3.stop();
           }
+          p1.stop();
           p.setIsShown(false);
         } else if (p.getType() == 'b') {
           b.boost();
@@ -111,12 +103,22 @@ void draw() {
         }
       }
     }
-    if (!p.stopped) {
-      p.update();
-      ellipse(p.pos.x, p.pos.y, 20, 20);
+    if (!p1.stopped) {
+      p1.update();
+      ellipse(p1.pos.x, p1.pos.y, 20, 20);
     }
-    if (millis()-p.m > 800) {
-      p.stopped = false;
+    if (millis()-p1.m > 800) {
+      p1.stopped = false;
+    }
+
+    for (AICar d3 : enemies) {
+      d3.display(p1);
+      if (d3.stopped) {
+        d3.body.setLinearVelocity(new Vec2(0,0));
+      }
+      if (millis()-d3.m > 800) {
+        d3.stopped = false;
+      }
     }
   }
 }
