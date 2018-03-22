@@ -1,4 +1,4 @@
-class CircleObst extends Obstacle {
+class CircleObst {
 
   // We need to keep track of a Body and a radius
   Body body;
@@ -8,7 +8,6 @@ class CircleObst extends Obstacle {
 
 
   CircleObst(float x, float y, float r_) {
-    super(x,y);
     r = r_;
     makeBody(x, y, r);
     body.setUserData(this);
@@ -36,26 +35,23 @@ class CircleObst extends Obstacle {
   // Here's our function that adds the particle to the Box2D world
   void makeBody(float x, float y, float r) {
     // Define a body
-    BodyDef bd = new BodyDef();
-    // Set its position
-    bd.position = box2d.coordPixelsToWorld(x, y);
-    bd.type = BodyType.STATIC;
-    body = box2d.createBody(bd);
-
-    // Make the body's shape a circle
     CircleShape cs = new CircleShape();
     cs.m_radius = box2d.scalarPixelsToWorld(r);
 
+   // Define a fixture
     FixtureDef fd = new FixtureDef();
     fd.shape = cs;
-    // Parameters that affect physics
+    // Parametershat affect physics
     fd.density = 1;
-    fd.friction = 0.01;
-    fd.restitution = 0.3;
+    fd.friction = 0.3;
+    fd.restitution = 0.5;
 
-    // Attach fixture to body
+    // Define the body and make it from the shape
+    BodyDef bd = new BodyDef();
+    bd.type = BodyType.STATIC;
+    bd.position.set(box2d.coordPixelsToWorld(x,y));
+
+    body = box2d.createBody(bd);
     body.createFixture(fd);
-
-    body.setAngularVelocity(random(-10, 10));
   }
 }
