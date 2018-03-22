@@ -4,7 +4,7 @@ class Point {
   int m = 0;
 
    PVector[][] checkPoints = {{new PVector(440, 120), new PVector(0, speed)}, 
-                              {new PVector(440, 460), new PVector (-speed, 0)},
+                              {new PVector(440, 460), new PVector (speed, 0)},
                               {new PVector(150, 460), new PVector (0, -speed)},
                               {new PVector(150, 120), new PVector (speed, 0)}};
 
