@@ -10,11 +10,13 @@ class AICar {
   float goal;
   Vec2 pos, vel;
   float mag;
-  boolean immunity;
+  boolean immunity, stopped;
+  int m;
 
 
   // Constructor
   AICar(float x, float y) {
+    stopped = false;
     w = 50;
     h = 20;
     // Add the box to the box2d world
@@ -34,10 +36,10 @@ class AICar {
     float distx = (other.pos.x/*+50*cos(other.rotation)*/) - box2d.getBodyPixelCoord(body).x;
     float disty = (other.pos.y/*+50*sin(other.rotation)*/) - box2d.getBodyPixelCoord(body).y;
 
-    if (distx > 0 && disty > 0) {goal = acos(distx/dist); println("first");}
-    if (distx < 0 && disty > 0) {goal = PI-acos((distx*-1)/(dist)); println("sec");}
-    if (distx < 0 && disty < 0) {goal = PI+acos((distx*-1)/(dist)); println("third");}
-    if (distx > 0 && disty < 0) {goal = PI+acos((distx*-1)/(dist)); println("fourth");}
+    if (distx > 0 && disty > 0) {goal = acos(distx/dist);}
+    if (distx < 0 && disty > 0) {goal = PI-acos((distx*-1)/(dist));}
+    if (distx < 0 && disty < 0) {goal = PI+acos((distx*-1)/(dist));}
+    if (distx > 0 && disty < 0) {goal = PI+acos((distx*-1)/(dist));}
     
     if (rotation > 2 * PI || rotation < 0)rotation %= 2*PI;
     if (goal > 2 * PI || goal < 0)goal %= 2*PI;
@@ -67,13 +69,8 @@ class AICar {
   }
 
 void stop() {
-    int m = millis();
-    body.setLinearVelocity(new Vec2(0,0).mulLocal(3));
-    while ((millis()-m)<10)
-    {
-      if(mag>0)
-        mag=0;
-    }
+    m = millis();
+    stopped = true;
   }
 
 
