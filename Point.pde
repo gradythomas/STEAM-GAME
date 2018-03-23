@@ -21,8 +21,8 @@ class Point {
     {new PVector(130-800, 480+600), new PVector (0, -speed)}, 
     {new PVector(130-800, 140+600), new PVector (speed, 0)}, 
     {new PVector(460-800, 140+600), new PVector (0, -speed)}, 
-    {new PVector(460-800, 630), new PVector (-speed, 0)}, 
-    {new PVector(240-800, 630), new PVector (0, -speed)}, 
+    {new PVector(460-800, 430), new PVector (-speed, 0)}, 
+    {new PVector(240-800, 430), new PVector (0, -speed)}, 
     {new PVector(240-800, 40), new PVector (speed, 0)}, 
     {new PVector(660-800, 40), new PVector (0, speed)}, 
     {new PVector(660-800, 140), new PVector (speed, 0)}};
