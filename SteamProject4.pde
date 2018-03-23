@@ -4,7 +4,7 @@ import org.jbox2d.common.*;
 import org.jbox2d.dynamics.*;
 import java.util.*;
 
-PImage startScreen, endScreen, starts1, starts2, starts3, starts4;
+PImage startScreen, endScreen, starts1, starts2, starts3, starts4, win, lose;
 PFont title;
 int screenY = 600;
 int screenX = 600;
@@ -44,7 +44,8 @@ void setup() {
   scores = new int[5];
   stage = 0;
   startScreen = loadImage("StartScreen.png");
-  endScreen = loadImage("WinScreen.png");
+  win = loadImage("WinScreen.png");
+  lose = loadImage("LoseScreen.png");
   starts1 = loadImage("3Screen.png");
   starts2 = loadImage("2Screen.png");
   starts3 = loadImage("1Screen.png");
@@ -583,7 +584,14 @@ void draw() {
     //totalTime = (millis() - (float) timeKeeper) /1000; //Time to put on highscore
     //ENDSCREEN CODE
     timeKeeper = -1;
-    image(endScreen, 0, 0);
+    float maxEnemy = 0;
+    if (enemies.get(0).pos.x > enemies.get(1).pos.x) maxEnemy = enemies.get(0).pos.x;
+    else maxEnemy = enemies.get(1).pos.x;
+    if (b.pos.x > maxEnemy) {
+      image(win, 0, 0);
+    } else {
+      image(lose, 0, 0);
+    }
     miniCheck=true;
 
     for (int i=0; i<scores.length; i++) {
@@ -597,7 +605,7 @@ void draw() {
       lapNumber = 0;
       stage = 1;
       count = 0;
-      for (AICar a : enemies) a.body.setTransform(new Vec2(box2d.coordPixelsToWorld(115,120)), -1*a.rotation);
+      for (AICar a : enemies) a.body.setTransform(new Vec2(box2d.coordPixelsToWorld(115, 120)), -1*a.rotation);
       p1.pos.set(150, 140);
       p1.vel.set(p1.speed, 0);
     }
