@@ -4,7 +4,7 @@ import org.jbox2d.common.*;
 import org.jbox2d.dynamics.*;
 import java.util.*;
 
-PImage startScreen, endScreen;
+PImage startScreen, endScreen, starts1, starts2, starts3, starts4;
 PFont title;
 int screenY = 600;
 int screenX = 600;
@@ -16,6 +16,7 @@ int timeKeeper = -1;
 boolean started = false;
 int counter = 0;
 float secondsPassed = 0;
+int count = 0;
 float totalTime;
 
 Box2DProcessing box2d;
@@ -35,8 +36,18 @@ void setup() {
   size(800, 600);
   lapNumber = 0;
 
-  stage = 1;
+  stage = 0;
   startScreen = loadImage("StartScreen.png");
+  endScreen = loadImage("WinScreen.png");
+  starts1 = loadImage("3Screen.png");
+  starts2 = loadImage("2Screen.png");
+  starts3 = loadImage("1Screen.png");
+  starts4 = loadImage("GoScreen.png");
+  endScreen.resize(800, 600);
+  starts1.resize(800, 600);
+  starts2.resize(800, 600);
+  starts3.resize(800, 600);
+  starts4.resize(800, 600);
   image(startScreen, 0, 0, width, height);
 
 
@@ -104,7 +115,7 @@ void setup() {
   obstacles.add(new Obstacle(750, 350, 3));
   tracks.add(new Track(750, 450));
   obstacles.add(new Obstacle(750, 550, 3));
-  
+
 
   powerUps.add(new FreezeBomb((int)(300*Math.random()+150), 150));
   powerUps.add(new FreezeBomb((int)(300*Math.random()+150), 450));
@@ -212,7 +223,7 @@ void setup() {
   obstacles.add(new Obstacle(550 + width, 350+height, 2));
   obstacles.add(new Obstacle(550 + width, 450+height, 1));
   obstacles.add(new Obstacle(550 + width, 550+height, 1));
-  
+
   obstacles.add(new Obstacle(650 + width, 50+height, 1));
   obstacles.add(new Obstacle(650 + width, 150+height, 1));
   obstacles.add(new Obstacle(650 + width, 250+height, 1));
@@ -271,7 +282,7 @@ void setup() {
   obstacles.add(new Obstacle(550, 350+height, 2));
   tracks.add(new Track(550, 450 + height, 3));
   obstacles.add(new Obstacle(550, 550+height, 3));
-  
+
   obstacles.add(new Obstacle(650, 50+height, 1));
   obstacles.add(new Obstacle(650, 150+height, 1));
   obstacles.add(new Obstacle(650, 250+height, 1));
@@ -285,8 +296,8 @@ void setup() {
   obstacles.add(new Obstacle(750, 350+height, 2));
   tracks.add(new Track(750, 450 + height, 3));
   obstacles.add(new Obstacle(750, 550+height, 3));
-  
-//stage 6
+
+  //stage 6
   obstacles.add(new Obstacle(50-width, 50+height, 3));
   obstacles.add(new Obstacle(50-width, 150+height, 3));
   obstacles.add(new Obstacle(50-width, 250+height, 3));
@@ -329,7 +340,7 @@ void setup() {
   obstacles.add(new Obstacle(550-width, 350+height, 2));
   tracks.add(new Track(550 - width, 450 + height, 3));
   obstacles.add(new Obstacle(550-width, 550+height, 3));
-  
+
   obstacles.add(new Obstacle(650-width, 50+height, 3));
   tracks.add(new Track(650 - width, 150 + height));
   tracks.add(new Track(650 - width, 250 + height));
@@ -343,7 +354,7 @@ void setup() {
   obstacles.add(new Obstacle(750-width, 350+height, 2));
   obstacles.add(new Obstacle(750-width, 450+height, 3));
   obstacles.add(new Obstacle(750-width, 550+height, 3));
-  
+
   //stage 7
   obstacles.add(new Obstacle(50-width, 50, 1));
   obstacles.add(new Obstacle(50-width, 150, 1));
@@ -380,14 +391,14 @@ void setup() {
   tracks.add(new Track(450 - width, 450));
   tracks.add(new Track(450 - width, 550));
   circleObstacles.add(new CircleObst(450 - width, 250, 150));
-  
+
   tracks.add(new Track(550 - width, 50));
   tracks.add(new Track(550 - width, 150));
   obstacles.add(new Obstacle(550-width, 250, 3));
   obstacles.add(new Obstacle(550-width, 350, 3));
   obstacles.add(new Obstacle(550-width, 450, 3));
   obstacles.add(new Obstacle(550-width, 550, 3));
-  
+
   tracks.add(new Track(650 - width, 50));
   tracks.add(new Track(650 - width, 150));
   obstacles.add(new Obstacle(650-width, 250, 3));
@@ -409,50 +420,49 @@ void setup() {
 }
 
 void draw() {
-  if (stage==1) {
+  if (stage==0) {
     if (keyPressed) {
       if (key == '1') {
         difficultyFactor = 0.8;
-        stage = 2;
+        stage = 1;
       } else if (key == '2') {
         difficultyFactor = 1;
-        stage = 2;
-      } else if (key == '3'){
+        stage = 1;
+      } else if (key == '3') {
         difficultyFactor = 1.2;
-        stage = 2;
+        stage = 1;
       } else if (key == 'h') {
-        
       }
+    }
+  }
+
+  if (stage == 1) {
+    //the "STARTING IN 3" screen
+    imageMode(CORNER);
+    count++;
+    if (count == 1) {
+      image(starts1, 0, 0);
+      delay(1000);
+    }
+    if (count == 2) {
+      image(starts2, 0, 0);
+      //STARTING IN 2
+      delay(1000);
+    }
+    if (count == 3) {
+      image(starts3, 0, 0);
+      //STARTING IN 1
+      delay(1000);
+    }
+    if (count == 4) {
+      image(starts4, 0, 0);
+      delay(1000);
+      started = true;
+      stage = 2;
     }
   }
   if (stage==2) {
     //println(box2d.getBodyPixelCoord(b.body).x + " " + box2d.getBodyPixelCoord(b.body).y);
-
-    if (lapNumber == 0 && !started && b.pos.x == 150) {
-        PImage starts;
-        //the "STARTING IN 3" screen
-        starts = loadImage("3Screen.png");
-        starts.resize(400,300);
-        imageMode(CENTER);
-        image(starts, width/2, height/2);
-        delay(1000);
-        starts = loadImage("1Screen.png");
-        starts.resize(400,300);
-        image(starts, width/2, height/2);
-        //STARTING IN 2
-        delay(1000);
-        starts = loadImage("2Screen.png");
-        starts.resize(400,300);
-        image(starts, width/2, height/2);
-        //STARTING IN 1
-        delay(1000);
-        starts = loadImage("GoScreen.png");
-        starts.resize(400,300);
-        image(starts, width/2, height/2);
-        //GO screen above the cars
-        imageMode(CORNER);
-        started = true;
-    }
     updateAll();
     if (timeKeeper == -1) {
       timeKeeper = millis();
@@ -466,8 +476,8 @@ void draw() {
       b.body.setTransform(new Vec2(box2d.coordPixelsToWorld(box2d.coordWorldToPixels(b.body.getWorldCenter()).x-width, box2d.coordWorldToPixels(b.body.getWorldCenter()).y)), -1*b.rotation);
       for (AICar a : enemies) a.body.setTransform(new Vec2(box2d.coordPixelsToWorld(box2d.coordWorldToPixels(a.body.getWorldCenter()).x-width, box2d.coordWorldToPixels(a.body.getWorldCenter()).y)), -1*a.rotation);
       p1.pos.x = p1.pos.x-width;
-      for (int i = 0; i < p1.checkPoints.length;i++) p1.checkPoints[i][0].x-=width;
-      for (Track t: tracks) t.setX(t.getX() - width);
+      for (int i = 0; i < p1.checkPoints.length; i++) p1.checkPoints[i][0].x-=width;
+      for (Track t : tracks) t.setX(t.getX() - width);
     }
   }
   if (stage == 3) {
@@ -481,8 +491,8 @@ void draw() {
       b.body.setTransform(new Vec2(box2d.coordPixelsToWorld(box2d.coordWorldToPixels(b.body.getWorldCenter()).x, box2d.coordWorldToPixels(b.body.getWorldCenter()).y-height)), -1*b.rotation);
       for (AICar a : enemies) a.body.setTransform(new Vec2(box2d.coordPixelsToWorld(box2d.coordWorldToPixels(a.body.getWorldCenter()).x, box2d.coordWorldToPixels(a.body.getWorldCenter()).y-height)), -1*a.rotation);
       p1.pos.y = p1.pos.y-height;
-      for (int i = 0; i < p1.checkPoints.length;i++) p1.checkPoints[i][0].y-=height;
-      for (Track t: tracks) t.setY(t.getY() -height);
+      for (int i = 0; i < p1.checkPoints.length; i++) p1.checkPoints[i][0].y-=height;
+      for (Track t : tracks) t.setY(t.getY() -height);
     }
   }
   if (stage == 4) {
@@ -496,8 +506,8 @@ void draw() {
       b.body.setTransform(new Vec2(box2d.coordPixelsToWorld(box2d.coordWorldToPixels(b.body.getWorldCenter()).x+width, box2d.coordWorldToPixels(b.body.getWorldCenter()).y)), -1*b.rotation);
       for (AICar a : enemies) a.body.setTransform(new Vec2(box2d.coordPixelsToWorld(box2d.coordWorldToPixels(a.body.getWorldCenter()).x+width, box2d.coordWorldToPixels(a.body.getWorldCenter()).y)), -1*a.rotation);
       p1.pos.x = p1.pos.x+width;
-      for (int i = 0; i < p1.checkPoints.length;i++) p1.checkPoints[i][0].x+=width;
-      for (Track t: tracks) t.setX(t.getX() + width);
+      for (int i = 0; i < p1.checkPoints.length; i++) p1.checkPoints[i][0].x+=width;
+      for (Track t : tracks) t.setX(t.getX() + width);
     }
   }
   if (stage == 5) {
@@ -511,8 +521,8 @@ void draw() {
       b.body.setTransform(new Vec2(box2d.coordPixelsToWorld(box2d.coordWorldToPixels(b.body.getWorldCenter()).x+width, box2d.coordWorldToPixels(b.body.getWorldCenter()).y)), -1*b.rotation);
       for (AICar a : enemies) a.body.setTransform(new Vec2(box2d.coordPixelsToWorld(box2d.coordWorldToPixels(a.body.getWorldCenter()).x+width, box2d.coordWorldToPixels(a.body.getWorldCenter()).y)), -1*a.rotation);
       p1.pos.x = p1.pos.x+width;
-      for (int i = 0; i < p1.checkPoints.length;i++) p1.checkPoints[i][0].x+=width;
-      for (Track t: tracks) t.setX(t.getX() + width);
+      for (int i = 0; i < p1.checkPoints.length; i++) p1.checkPoints[i][0].x+=width;
+      for (Track t : tracks) t.setX(t.getX() + width);
     }
   }
   if (stage == 6) {
@@ -526,8 +536,8 @@ void draw() {
       b.body.setTransform(new Vec2(box2d.coordPixelsToWorld(box2d.coordWorldToPixels(b.body.getWorldCenter()).x, box2d.coordWorldToPixels(b.body.getWorldCenter()).y+height)), -1*b.rotation);
       for (AICar a : enemies) a.body.setTransform(new Vec2(box2d.coordPixelsToWorld(box2d.coordWorldToPixels(a.body.getWorldCenter()).x, box2d.coordWorldToPixels(a.body.getWorldCenter()).y+height)), -1*a.rotation);
       p1.pos.y = p1.pos.y+height;
-      for (int i = 0; i < p1.checkPoints.length;i++) p1.checkPoints[i][0].y+=height;
-      for (Track t: tracks) t.setY(t.getY() +height);
+      for (int i = 0; i < p1.checkPoints.length; i++) p1.checkPoints[i][0].y+=height;
+      for (Track t : tracks) t.setY(t.getY() +height);
     }
   }
   if (stage == 7) {
@@ -541,8 +551,8 @@ void draw() {
       b.body.setTransform(new Vec2(box2d.coordPixelsToWorld(box2d.coordWorldToPixels(b.body.getWorldCenter()).x-width, box2d.coordWorldToPixels(b.body.getWorldCenter()).y)), -1*b.rotation);
       for (AICar a : enemies) a.body.setTransform(new Vec2(box2d.coordPixelsToWorld(box2d.coordWorldToPixels(a.body.getWorldCenter()).x-width, box2d.coordWorldToPixels(a.body.getWorldCenter()).y)), -1*a.rotation);
       p1.pos.x = p1.pos.x-width;
-      for (int i = 0; i < p1.checkPoints.length;i++) p1.checkPoints[i][0].x-=width;
-      for (Track t: tracks) t.setX(t.getX() - width);
+      for (int i = 0; i < p1.checkPoints.length; i++) p1.checkPoints[i][0].x-=width;
+      for (Track t : tracks) t.setX(t.getX() - width);
       lapNumber++;
     }
   }
@@ -552,7 +562,12 @@ void draw() {
   if (stage == 8) { 
     totalTime = (millis() - (float) timeKeeper) /1000; //Time to put on highscore
     //ENDSCREEN CODE
-    endScreen = loadImage("");
+    image(endScreen, 0, 0);
+    if (keyPressed) {
+      lapNumber = 0;
+      stage = 1;
+      count = 0;
+    }
   }
   secondsPassed = (millis() - (float) timeKeeper) / 1000; // Time to display
 }
@@ -563,9 +578,9 @@ void updateAll() {
 
   // We must always step through time!
   box2d.step();
-  
-  
-  for (Track tra: tracks) {
+
+
+  for (Track tra : tracks) {
     tra.display();
   }
 
