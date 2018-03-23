@@ -1,28 +1,35 @@
-// The Nature of Code
-// <http://www.shiffman.net/teaching/nature>
-// Spring 2010
-// Box2DProcessing example
-
-// A rectangular box
 class Obstacle {
-
-  // We need to keep track of a Body and a width and height
   Body body;
   float w;
   float h;
   float rotation;
   PVector pos, vel;
   float mag;
+  int terrain;
+  PImage grass;
+  PImage water;
+  PImage wall;
+  float x;
+  float y;
 
   // Constructor
-  Obstacle(float x, float y) {
+  Obstacle(float x, float y, int terrain) {
     w = 100;
     h = 100;
+    this.x=x;
+    this.y=y;
+    this.terrain=terrain;
     // Add the box to the box2d world
     makeBody(new Vec2(x, y), w, h);
     mag = 0;
-    pos = new PVector(x,y);
-    vel = new PVector(0.0,0.0);
+    pos = new PVector(x, y);
+    vel = new PVector(0.0, 0.0);
+    grass = loadImage("grass.png");
+    grass.resize(100, 100);
+    water = loadImage("water.png");
+    water.resize(100, 100);
+    wall = loadImage("brick.png");
+    wall.resize(100, 100);
   }
 
   // Drawing the box
@@ -31,17 +38,23 @@ class Obstacle {
     Vec2 pos3 = box2d.getBodyPixelCoord(body);
     // Get its angle of rotation
     //float a = body.getAngle();
-
     rectMode(CENTER);
     pushMatrix();
     translate(pos3.x, pos3.y);
     rotate(rotation);
     fill(175);
     stroke(0);
-    rect(0, 0, w, h);
+    if (terrain==1) {
+      image(grass, -50, -50);
+    }
+    if (terrain==2) {
+      image(water, -50, -50);
+    }
+    if (terrain==3) {
+      image(wall, -50, -50);
+    }
     popMatrix();
   }
-
   // This function adds the rectangle to the box2d world
   void makeBody(Vec2 center, float w_, float h_) {
 
