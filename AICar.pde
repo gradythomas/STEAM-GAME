@@ -7,11 +7,16 @@ class AICar {
   float w;
   float h;
   float rotation;
+  float goal;
   Vec2 pos, vel;
   float mag;
+  boolean immunity, stopped;
+  int m;
+
 
   // Constructor
   AICar(float x, float y) {
+    stopped = false;
     w = 50;
     h = 20;
     // Add the box to the box2d world
@@ -21,23 +26,36 @@ class AICar {
     vel = new Vec2(0.0, 0.0);
     car = loadImage("car2.png");
     car.resize(50,20);
+    goal = 0;
+    rotation = 0;
   }
 
-  void accelerate(Car other) {
-    float dist = dist(box2d.getBodyPixelCoord(body).x, box2d.getBodyPixelCoord(body).y, (box2d.getBodyPixelCoord(other.body).x/*+50*cos(other.rotation)*/), (box2d.getBodyPixelCoord(other.body).y/*+50*sin(other.rotation)*/));
-    mag+=0.1;
-    float distx = (box2d.getBodyPixelCoord(other.body).x/*+50*cos(other.rotation)*/) - box2d.getBodyPixelCoord(body).x;
-    float disty = (box2d.getBodyPixelCoord(other.body).y/*+50*sin(other.rotation)*/) - box2d.getBodyPixelCoord(body).y;
+  void accelerate(Point other) {
+    float dist = dist(box2d.getBodyPixelCoord(body).x, box2d.getBodyPixelCoord(body).y, other.pos.x, other.pos.y/*+50*sin(other.rotation)*/);
+    mag+=0.5;
+    float distx = (other.pos.x/*+50*cos(other.rotation)*/) - box2d.getBodyPixelCoord(body).x;
+    float disty = (other.pos.y/*+50*sin(other.rotation)*/) - box2d.getBodyPixelCoord(body).y;
 
-    if (distx > 0 && disty > 0) rotation = acos(distx/dist);
-    if (distx < 0 && disty > 0) rotation = PI-acos((distx*-1)/(dist));
-    if (distx < 0 && disty < 0) rotation = PI+acos((distx*-1)/(dist));
-    if (distx > 0 && disty < 0) rotation = PI+acos((distx*-1)/(dist));
-
-    if (mag > 20) mag = 20;
+    if (distx > 0 && disty > 0) {goal = acos(distx/dist);}
+    if (distx < 0 && disty > 0) {goal = PI-acos((distx*-1)/(dist));}
+    if (distx < 0 && disty < 0) {goal = PI+acos((distx*-1)/(dist));}
+    if (distx > 0 && disty < 0) {goal = PI+acos((distx*-1)/(dist));}
+    
+    if (rotation > 2 * PI || rotation < 0)rotation %= 2*PI;
+    if (goal > 2 * PI || goal < 0)goal %= 2*PI;
+    
+    /*if (goal < rotation && rotation - goal > PI) rotation -= .05;
+    if (goal < rotation && rotation - goal < PI) rotation += .05;
+    if (goal > rotation && goal - rotation < PI) rotation += .05;
+    if (goal > rotation && goal - rotation > PI) rotation -= .05;*/
+    
+    //if (Math.abs(rotation - goal) < 1) rotation = goal;
+    //rotation += goal/60;
+    rotation = goal;
+    if (dist < 100) mag = 7;
   }
 
-  void move(Car other) {
+  void move(Point other) {
     accelerate(other);
 
     vel.x = cos(rotation)*mag;
@@ -50,11 +68,15 @@ class AICar {
     body.setLinearVelocity(new Vec2(vel.x, vel.y).mulLocal(3));
   }
 
+void stop() {
+    m = millis();
+    stopped = true;
+  }
 
 
 
   // Drawing the box
-  void display(Car other) {
+  void display(Point other) {
     move(other);
     // We look at each body and get its screen position
     Vec2 pos3 = box2d.getBodyPixelCoord(body);
